@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO APP</title>
+    <style>
+        h1 {
+            padding-left: 500px;
+            border: 2px solid black;
+            background-color: #2A3D66; 
+            width: 60%;
+            height: 14vh;
+            color: white;
+        }
+        h2
+        {
+            padding-left:70px ;
+        }
+
+        body {
+            background-color: #1d1d1d; 
+        }
+
+        .c1 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 20px;
+            border: 2px solid #444444; 
+        }
+
+        .todo-input-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .todo-input {
+            width: 70%;
+            margin-bottom: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 25%;
+            padding: 10px;
+            background-color: #3A9B9F;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 35px;
+        }
+
+        button:hover {
+            background-color: #58C7C3; 
+        }
+
+        .todo-item {
+            width: 70%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #f0f0f0; 
+            border: 1px solid white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .todo-item button {
+            background-color: #E54D47;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .todo-item button:hover {
+            background-color: #D74B42;
+        }
+    </style>
+</head>
+<body>
+    <h1>TODO APP</h1>
+    <div class="c1">
+        <div id="APP" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2>TO DO</h2>
+            <div class="todo-input-container">
+                <input type="text" id="textAPP" class="todo-input" placeholder="Please Enter TEXT">
+                <button onclick="TODOAPP('APP')">Add list</button>
+            </div>
+        </div>
+        <div id="karachi" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2>TO DO</h2>
+            <div class="todo-input-container">
+                <input type="text" id="textKarachi" class="todo-input" placeholder="Please Enter TEXT">
+                <button onclick="TODOAPP('karachi')">Add list</button>
+            </div>
+        </div>
+        <div id="hyderabad" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <h2>TO DO</h2>
+            <div class="todo-input-container">
+                <input type="text" id="textHyderabad" class="todo-input" placeholder="Please Enter TEXT">
+                <button onclick="TODOAPP('hyderabad')">Add list</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function allowDrop(event) {
+            event.preventDefault(); 
+        }
+
+        function drag(event) {
+            event.dataTransfer.setData("text", event.target.id); 
+        }
+
+        function drop(event) {
+            event.preventDefault(); 
+            var data = event.dataTransfer.getData("text"); 
+            var draggedElement = document.getElementById(data); 
+            var targetDiv = event.target; 
+
+            if (targetDiv && targetDiv !== draggedElement && targetDiv.tagName !== 'BUTTON' && targetDiv.tagName !== 'INPUT') {
+                targetDiv.appendChild(draggedElement); 
+            }
+        }
+
+        function TODOAPP(section) {
+            var text = document.getElementById('text' + section.charAt(0).toUpperCase() + section.slice(1)).value;
+
+            if (text.trim() !== "") {
+                var newTodoItem = document.createElement("div");
+                newTodoItem.classList.add("todo-item");
+                newTodoItem.setAttribute("id", section + "-" + new Date().getTime()); 
+                newTodoItem.setAttribute("draggable", "true"); 
+                newTodoItem.setAttribute("ondragstart", "drag(event)"); 
+
+                var todoText = document.createElement("span");
+                todoText.textContent = text;
+                newTodoItem.appendChild(todoText);
+
+                var deleteBtn = document.createElement("button");
+                deleteBtn.textContent = "Delete";
+                deleteBtn.onclick = function() {
+                    newTodoItem.remove();
+                };
+                newTodoItem.appendChild(deleteBtn);
+
+                var parentDiv = document.getElementById(section);
+                parentDiv.appendChild(newTodoItem);
+
+                document.getElementById('text' + section.charAt(0).toUpperCase() + section.slice(1)).value = "";
+            } else {
+                alert("Please enter some text!");
+            }
+        }
+    </script>
+</body>
+</html>
